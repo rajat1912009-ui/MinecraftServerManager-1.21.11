@@ -1,0 +1,13 @@
+{
+  "id": "test-world",
+  "name": "test-world",
+  "seed": null,
+  "gamemode": "survival",
+  "difficulty": "easy",
+  "hardcore": false,
+  "generate_structures": true,
+  "max_players": 2,
+  "view_distance": 12,
+  "simulation_distance": 8,
+  "pvp": true
+}

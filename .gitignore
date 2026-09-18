@@ -1,0 +1,62 @@
+# ── Minecraft runtime world ─────────────────────────────
+world
+world/
+world.runtime-backup/
+world.backup-*/
+world.before-*/
+
+
+
+# ── Managed world saves ─────────────────────────────────
+# Ignore all world data, but keep each world's metadata.
+worlds/*/level.dat
+worlds/*/level.dat_old
+worlds/*/session.lock
+worlds/*/region/
+worlds/*/entities/
+worlds/*/poi/
+worlds/*/data/
+worlds/*/DIM-1/
+worlds/*/DIM1/
+
+
+
+
+# ── Backups ──────────────────────────────────────────────
+backups/
+
+# ── Runtime/generated data ──────────────────────────────
+logs/
+crash-reports/
+.fabric/
+libraries/
+versions/
+
+# ── Runtime IPC ─────────────────────────────────────────
+server.stdin
+server.properties
+
+
+# ── Local Minecraft state ───────────────────────────────
+usercache.json
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json
+
+# ── Server acceptance ───────────────────────────────────
+# EULA acceptance is local machine state.
+eula.txt
+
+# ── Local/editor junk ───────────────────────────────────
+.DS_Store
+*.swp
+*.swo
+
+
+# ── Server binaries / downloaded mods ─────────────────────
+*.jar
+mods/
+
+# ── Manager runtime state ────────────────────────────────
+.server-task

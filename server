@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+case "$1" in
+
+    worlds)
+        "$SCRIPT_DIR/scripts/worlds.sh"
+        ;;
+
+    world-info)
+        "$SCRIPT_DIR/scripts/world-info.sh" "$2"
+        ;;
+
+    activate)
+        "$SCRIPT_DIR/scripts/activate-world.sh" "$2"
+        ;;
+
+    apply-config)
+        "$SCRIPT_DIR/scripts/apply-world-config.sh" "$2"
+        ;;
+
+    status)
+        "$SCRIPT_DIR/scripts/status.sh"
+        ;;
+
+    info)
+        "$SCRIPT_DIR/scripts/server-info.sh"
+        ;;
+
+    start)
+        "$SCRIPT_DIR/scripts/start.sh" "$2"
+        ;;
+
+    stop)
+        "$SCRIPT_DIR/scripts/stop.sh"
+        ;;
+
+    create)
+        shift
+        "$SCRIPT_DIR/scripts/create-world.sh" "$@"
+        ;;
+
+    delete-world)
+        "$SCRIPT_DIR/scripts/delete-world.sh" "$2"
+        ;;
+
+    backup)
+        "$SCRIPT_DIR/scripts/backup.sh" "$2"
+        ;;
+
+    backups)
+        "$SCRIPT_DIR/scripts/list-backups.sh"
+        ;;
+
+    restore)
+        "$SCRIPT_DIR/scripts/restore-backup.sh" "$2"
+        ;;
+
+    pregenerate)
+        "$SCRIPT_DIR/scripts/pregenerate.sh" "$2" "$3"
+        ;;
+
+    task)
+        shift
+        "$SCRIPT_DIR/scripts/task.sh" "$@"
+        ;;
+
+    idle-check)
+        "$SCRIPT_DIR/scripts/idle-check.sh"
+        ;;
+
+    console)
+        shift
+        "$SCRIPT_DIR/scripts/console.sh" "$@"
+        ;;
+
+    *)
+        echo "Usage:"
+        echo
+        echo "  ./server worlds"
+        echo "  ./server world-info <id>"
+        echo "  ./server create <id> [options]"
+        echo "  ./server delete-world <id>"
+        echo "  ./server activate <id>"
+        echo "  ./server apply-config <id>"
+        echo "  ./server start <id>"
+        echo "  ./server stop"
+        echo "  ./server status"
+        echo "  ./server info"
+        echo "  ./server backup <id>"
+        echo "  ./server backups"
+        echo "  ./server restore <backup.tar.gz>"
+        echo "  ./server pregenerate <id> <radius>"
+        echo "  ./server task <start|status|active|end|guard> ..."
+        echo "  ./server idle-check"
+        echo "  ./server console \"<command>\""
+        exit 1
+        ;;
+
+esac
