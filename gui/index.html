@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="overlay" class="overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="brand-icon">⛏</div>
+                <div>
+                    <strong>Minecraft Server</strong>
+                    <span>Manager · 1.21.11</span>
+                </div>
+            </div>
+           <button
+    id="closeMenu"
+    class="sidebar-close"
+    aria-label="Close menu"
+    type="button"
+>
+    <span></span>
+    <span></span>
+</button>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-item active" data-page="home" type="button">
+                <span>⌂</span><span>Home</span>
+            </button>
+            <button class="nav-item" data-page="world" type="button">
+                <span>◇</span><span>World</span>
+            </button>
+            <button class="nav-item" data-page="settings" type="button">
+                <span>⚙</span><span>Settings</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-label">DEVELOPER</p>
+
+            <button class="nav-item" data-page="console" type="button">
+                <span>›_</span><span>Console</span>
+            </button>
+            <button class="nav-item" data-page="diagnostics" type="button">
+                <span>✓</span><span>Diagnostics</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="connection-status">
+                <span class="status-dot"></span>
+                <span>Local manager</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- APP -->
+    <main class="app">
+        <header class="topbar">
+            <button id="openMenu" class="icon-button mobile-only menu-button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false" type="button">
+    <span class="menu-line"></span>
+    <span class="menu-line"></span>
+    <span class="menu-line"></span>
+</button>
+            <div class="topbar-title">
+                <h1 id="pageTitle">Home</h1>
+                <p id="pageSubtitle">Server control panel</p>
+            </div>
+            <div id="serverStatus" class="status">
+                <span class="status-dot"></span>
+                <span id="serverStatusText">STOPPED</span>
+            </div>
+        </header>
+
+        <!-- HOME -->
+        <section id="page-home" class="page active-page">
+            <div class="hero-card">
+                <div>
+                    <p class="label">SERVER STATUS</p>
+                    <div class="hero-status">
+                        <span id="homeStatusDot" class="big-status-dot"></span>
+                        <div>
+                            <h2 id="homeStatusText">Server is stopped</h2>
+                            <p id="homeStatusSubtext" class="muted">Ready to start the selected world.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-row">
+                    <button id="startButton" class="primary-button" type="button">▶ Start Server</button>
+                    <button id="stopButton" class="secondary-button" disabled type="button">■ Stop</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="card stat-card">
+                    <p class="label">ACTIVE WORLD</p>
+                    <h2 id="homeWorldName">Survival 1</h2>
+                    <p id="homeWorldId" class="muted">survival-1</p>
+                </div>
+                <div class="card stat-card">
+                    <p class="label">PLAYERS</p>
+                    <h2 id="playerCount">0 / 2</h2>
+                    <p class="muted">Online players</p>
+                </div>
+                <div class="card stat-card">
+                    <p class="label">RUNTIME</p>
+                    <h2 id="runtime">Stopped</h2>
+                    <p class="muted">Server uptime</p>
+                </div>
+                <div class="card stat-card">
+                    <p class="label">RAM</p>
+                    <h2 id="ramUsage">—</h2>
+                    <p class="muted">Java process</p>
+                </div>
+            </div>
+
+            <div class="section-row">
+                <div>
+                    <p class="label">QUICK ACTIONS</p>
+                    <h2 class="section-title">Server tools</h2>
+                </div>
+            </div>
+
+            <div class="action-grid">
+                <button class="action-card" data-page-target="world" type="button">
+                    <span class="action-icon">◇</span>
+                    <strong>Manage Worlds</strong>
+                    <span>Create, select, backup and restore worlds</span>
+                </button>
+                <button id="quickBackup" class="action-card" type="button">
+                    <span class="action-icon">▣</span>
+                    <strong>Backup</strong>
+                    <span>Back up the currently selected world</span>
+                </button>
+                <button id="quickConsole" class="action-card" type="button">
+                    <span class="action-icon">›_</span>
+                    <strong>Console</strong>
+                    <span>Send a Minecraft server command</span>
+                </button>
+                <button class="action-card" data-page-target="diagnostics" type="button">
+                    <span class="action-icon">✓</span>
+                    <strong>Diagnostics</strong>
+                    <span>Run the complete manager self-test</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- WORLD -->
+        <section id="page-world" class="page">
+            <div class="section-row">
+                <div>
+                    <p class="label">WORLD MANAGEMENT</p>
+                    <h2>Worlds</h2>
+                    <p class="muted">Select and manage the worlds known to the server manager.</p>
+                </div>
+                <button id="createWorldButton" class="primary-button" type="button">+ Create New World</button>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <p class="label">ACTIVE WORLD</p>
+                            <h2 id="worldActiveName">Survival 1</h2>
+                            <p id="worldActiveId" class="muted">survival-1</p>
+                        </div>
+                        <span class="pill">ACTIVE</span>
+                    </div>
+
+                    <div id="worldList" class="world-list">
+                        <button class="world-entry active" data-world-id="survival-1" type="button">
+                            <div>
+                                <strong>Survival 1</strong>
+                                <span>survival-1 · Survival · Easy</span>
+                            </div>
+                            <span class="world-entry-status">ACTIVE</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card world-details-card">
+                    <div class="card-header">
+                        <div>
+                            <p class="label">WORLD DETAILS</p>
+                            <h2>Configuration</h2>
+                        </div>
+                        <span class="pill">WORLD.JSON</span>
+                    </div>
+
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span>ID</span>
+                            <strong id="detailId">survival-1</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Name</span>
+                            <strong id="detailName">Survival 1</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Gamemode</span>
+                            <strong id="detailGamemode">Survival</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Difficulty</span>
+                            <strong id="detailDifficulty">Easy</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Seed</span>
+                            <strong id="detailSeed">Random</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Max Players</span>
+                            <strong id="detailPlayers">2</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>View Distance</span>
+                            <strong id="detailViewDistance">12</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Simulation Distance</span>
+                            <strong id="detailSimulationDistance">8</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Hardcore</span>
+                            <strong id="detailHardcore">Disabled</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Structures</span>
+                            <strong id="detailStructures">Enabled</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>PvP</span>
+                            <strong id="detailPvp">Enabled</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span>Active</span>
+                            <strong id="detailActive">Yes</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card page-card">
+                <div class="section-row compact">
+                    <div>
+                        <p class="label">WORLD OPERATIONS</p>
+                        <h2>Selected world</h2>
+                    </div>
+                </div>
+
+                <div class="operation-grid">
+                    <button id="backupButton" class="secondary-button" type="button">▣ Backup</button>
+                    <button id="restoreButton" class="secondary-button" type="button">↶ Restore</button>
+                    <button id="pregenerateButton" class="secondary-button" type="button">▧ Pregenerate</button>
+                    <button id="deleteWorldButton" class="danger-button" type="button">Delete World</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="page-settings" class="page">
+            <div class="section-row">
+                <div>
+                    <p class="label">WORLD CONFIGURATION</p>
+                    <h2>Settings</h2>
+                    <p class="muted">Edit the configuration of the currently selected world.</p>
+                </div>
+                <button id="saveSettingsButton" class="save-button" type="button">Save Changes</button>
+            </div>
+
+            <div class="card">
+                <div class="form-grid">
+                    <label>
+                        <span>Game Mode</span>
+                        <select id="settingsGamemode" class="setting-select">
+                            <option value="survival">Survival</option>
+                            <option value="creative">Creative</option>
+                            <option value="adventure">Adventure</option>
+                            <option value="spectator">Spectator</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Difficulty</span>
+                        <select id="settingsDifficulty" class="setting-select">
+                            <option value="peaceful">Peaceful</option>
+                            <option value="easy" selected>Easy</option>
+                            <option value="normal">Normal</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Max Players</span>
+                        <input id="settingsMaxPlayers" type="number" min="1" value="2">
+                    </label>
+                    <label>
+                        <span>View Distance</span>
+                        <input id="settingsViewDistance" type="number" min="2" value="12">
+                    </label>
+                    <label>
+                        <span>Simulation Distance</span>
+                        <input id="settingsSimulationDistance" type="number" min="2" value="8">
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div><strong>Hardcore</strong><span>Enable hardcore rules for this world.</span></div>
+                    <label class="switch"><input id="settingsHardcore" type="checkbox"><span></span></label>
+                </div>
+                <div class="setting-row">
+                    <div><strong>Structures</strong><span>Generate villages, temples and other structures.</span></div>
+                    <label class="switch"><input id="settingsStructures" type="checkbox" checked><span></span></label>
+                </div>
+                <div class="setting-row">
+                    <div><strong>PvP</strong><span>Allow players to damage one another.</span></div>
+                    <label class="switch"><input id="settingsPvp" type="checkbox" checked><span></span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONSOLE -->
+        <section id="page-console" class="page">
+            <div class="section-row">
+                <div>
+                    <p class="label">DEVELOPER</p>
+                    <h2>Console</h2>
+                    <p class="muted">Send commands directly to the Minecraft server.</p>
+                </div>
+            </div>
+
+            <div class="warning">Commands on this page will eventually be sent through <code>server.stdin</code>.</div>
+
+            <div class="card">
+                <div id="consoleOutput" class="console-box">
+                    <span>[manager] Console ready.</span>
+                    <span>[manager] Backend connection not attached yet.</span>
+                </div>
+
+                <form id="consoleForm" class="console-input-row">
+                    <input id="consoleInput" type="text" placeholder="e.g. say Hello from the manager">
+                    <button type="submit" class="primary-button">Send</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- DIAGNOSTICS -->
+        <section id="page-diagnostics" class="page">
+            <div class="section-row">
+                <div>
+                    <p class="label">DEVELOPER</p>
+                    <h2>Diagnostics</h2>
+                    <p class="muted">The same integration test you already use on the server.</p>
+                </div>
+                <button id="testButton" class="primary-button" type="button">Run Full Self-Test</button>
+            </div>
+
+            <div class="card">
+                <div class="test-result">
+                    <span id="testIcon" class="test-icon">✓</span>
+                    <div>
+                        <strong id="testStatus">Ready</strong>
+                        <span id="testSubstatus">No self-test has been started.</span>
+                    </div>
+                </div>
+
+                <div class="diagnostic-log">
+                    <pre id="diagnosticLog">Waiting for test output...</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CREATE WORLD MODAL -->
+    <div id="createWorldModal" class="modal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="createWorldTitle">
+            <div class="modal-header">
+                <div>
+                    <p class="label">WORLD MANAGEMENT</p>
+                    <h2 id="createWorldTitle">Create New World</h2>
+                </div>
+                <button id="closeCreateWorld" class="icon-button" aria-label="Close" type="button">×</button>
+            </div>
+
+            <form id="createWorldForm">
+                <div class="form-section">
+                    <p class="label">BASIC INFORMATION</p>
+                    <div class="form-grid">
+                        <label><span>World ID</span><input id="worldId" required placeholder="survival-2"></label>
+                        <label><span>Display Name</span><input id="worldName" required placeholder="My Survival World"></label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="label">SEED</p>
+                    <div class="seed-options">
+                        <label class="radio-card">
+                            <input type="radio" name="seedMode" value="random" checked>
+                            <div><strong>Random</strong><span>Let Minecraft generate the seed.</span></div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="seedMode" value="custom">
+                            <div><strong>Custom</strong><span>Use a specific seed value.</span></div>
+                        </label>
+                    </div>
+                    <label class="seed-input"><span>Custom Seed</span><input id="worldSeed" type="text" disabled placeholder="123456789"></label>
+                </div>
+
+                <div class="form-section">
+                    <p class="label">GAMEPLAY</p>
+                    <div class="form-grid">
+                        <label><span>Game Mode</span>
+                            <select id="worldGamemode">
+                                <option value="survival">Survival</option>
+                                <option value="creative">Creative</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="spectator">Spectator</option>
+                            </select>
+                        </label>
+                        <label><span>Difficulty</span>
+                            <select id="worldDifficulty">
+                                <option value="peaceful">Peaceful</option>
+                                <option value="easy" selected>Easy</option>
+                                <option value="normal">Normal</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-setting">
+                        <div><strong>Hardcore</strong><span>Enable hardcore mode.</span></div>
+                        <label class="switch"><input id="worldHardcore" type="checkbox"><span></span></label>
+                    </div>
+                    <div class="form-setting">
+                        <div><strong>Structures</strong><span>Generate villages, temples and other structures.</span></div>
+                        <label class="switch"><input id="worldStructures" type="checkbox" checked><span></span></label>
+                    </div>
+                    <div class="form-setting">
+                        <div><strong>PvP</strong><span>Allow player versus player damage.</span></div>
+                        <label class="switch"><input id="worldPvp" type="checkbox" checked><span></span></label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="label">SERVER LIMITS</p>
+                    <div class="form-grid">
+                        <label><span>Max Players</span><input id="worldMaxPlayers" type="number" min="1" value="2"></label>
+                        <label><span>View Distance</span><input id="worldViewDistance" type="number" min="2" value="12"></label>
+                        <label><span>Simulation Distance</span><input id="worldSimulationDistance" type="number" min="2" value="8"></label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="cancelCreateWorld" type="button" class="secondary-button">Cancel</button>
+                    <button type="submit" class="primary-button">Create World</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
